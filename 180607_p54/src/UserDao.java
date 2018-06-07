@@ -5,9 +5,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserDao {
-	ConnectionMaker sc = new AConnectionMaker();
+	ConnectionMaker cm;
+	
+	public UserDao(ConnectionMaker connectionMaker) {
+		this.cm= connectionMaker;
+	}
 	public void add(User user) throws ClassNotFoundException, SQLException {
-		Connection c = sc.makeConnection();
+		Connection c = cm.makeConnection();
 		PreparedStatement ps = c.prepareStatement("insert into User(id, name, password) values(?,?,?)");
 		ps.setString(1, user.getId());
 		ps.setString(2,  user.getName());
@@ -19,7 +23,7 @@ public class UserDao {
 	}
 	
 	public User get(String id) throws ClassNotFoundException, SQLException {
-		Connection c = sc.makeConnection();
+		Connection c = cm.makeConnection();
 		PreparedStatement ps = c.prepareStatement("select * from User where id = ?");
 		ps.setString(1, id);
 		ResultSet rs = ps.executeQuery();
@@ -33,22 +37,5 @@ public class UserDao {
 		ps.close();
 		c.close();
 		return user;
-	}
-	
-	public static void main (String[] args) throws ClassNotFoundException, SQLException {
-		UserDao dao = new UserDao();
-		User user = new User();
-		user.setId("1241rf");
-		user.setName("asdsad");
-		user.setPassword("married");
-		
-		dao.add(user);
-		System.out.println(user.getId()+ "등록 성공");
-		
-		User user2 = dao.get(user.getId());
-		System.out.println(user2.getName());
-		System.out.println(user2.getName());
-		
-		System.out.println(user2.getId() + "조회 성공");
 	}
 }
