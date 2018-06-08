@@ -3,5 +3,12 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="/Users/hansanghyeon/Desktop/mysql-connector-java-8.0.11/mysql-connector-java-8.0.11/mysql-connector-java-8.0.11.jar"/>
+	<classpathentry kind="lib" path="/Users/hansanghyeon/Desktop/com.springsource.net.sf.cglib-2.2.0.jar/com.springsource.net.sf.cglib-2.2.0.jar"/>
+	<classpathentry kind="lib" path="/Users/hansanghyeon/Desktop/com.springsource.net.sf.cglib-2.2.0.jar/com.springsource.org.apache.commons.logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/Users/hansanghyeon/Desktop/com.springsource.net.sf.cglib-2.2.0.jar/spring-asm-3.0.7.release.jar"/>
+	<classpathentry kind="lib" path="/Users/hansanghyeon/Desktop/com.springsource.net.sf.cglib-2.2.0.jar/spring-beans-3.0.7.release.jar"/>
+	<classpathentry kind="lib" path="/Users/hansanghyeon/Desktop/com.springsource.net.sf.cglib-2.2.0.jar/spring-context-3.0.7.release.jar"/>
+	<classpathentry kind="lib" path="/Users/hansanghyeon/Desktop/com.springsource.net.sf.cglib-2.2.0.jar/spring-core-3.0.7.release.jar"/>
+	<classpathentry kind="lib" path="/Users/hansanghyeon/Desktop/com.springsource.net.sf.cglib-2.2.0.jar/spring-expression-3.0.7.release.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
