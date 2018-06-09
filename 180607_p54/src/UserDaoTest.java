@@ -7,6 +7,7 @@ import org.springframework.context.support.GenericXmlApplicationContext;
 public class UserDaoTest {
 	public static void main (String[] args) throws ClassNotFoundException, SQLException {
 		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
+//		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
 		UserDao dao = context.getBean("userDao", UserDao.class);//오브젝트 클래스가 기본으로 리턴되는데, 두번째 인자로 제네릭 메소드방식을 통해 형을 캐스팅해줄수 있음 
 		User user = new User();
 		user.setId("124f");
