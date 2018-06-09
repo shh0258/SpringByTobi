@@ -5,11 +5,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserDao {
-	ConnectionMaker cm;
+	private ConnectionMaker cm;
 	
-	public UserDao(ConnectionMaker connectionMaker) {
-		this.cm= connectionMaker;
+	public void setConnectionMaker(ConnectionMaker connectionMaker) {
+		this.cm = connectionMaker;
 	}
+	
 	public void add(User user) throws ClassNotFoundException, SQLException {
 		Connection c = cm.makeConnection();
 		PreparedStatement ps = c.prepareStatement("insert into User(id, name, password) values(?,?,?)");

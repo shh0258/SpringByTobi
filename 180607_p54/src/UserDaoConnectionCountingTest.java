@@ -1,6 +1,8 @@
 import java.sql.SQLException;
 
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
 
 public class UserDaoConnectionCountingTest {
 
@@ -10,7 +12,7 @@ public class UserDaoConnectionCountingTest {
 		UserDao dao = context.getBean("userDao", UserDao.class);
 		
 		User user = new User();
-		user.setId("124f");
+		user.setId("122234f");
 		user.setName("asdsad");
 		user.setPassword("married");
 		
