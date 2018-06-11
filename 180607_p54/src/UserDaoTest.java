@@ -7,7 +7,7 @@ import static org.junit.Assert.assertThat;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
-
+import org.springframework.dao.EmptyResultDataAccessException;
 public class UserDaoTest {
 	public static void main (String[] args) throws ClassNotFoundException, SQLException {
 //		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
@@ -33,16 +33,21 @@ public class UserDaoTest {
 		UserDao dao = context.getBean("userDao", UserDao.class);
 		dao.deleteAll();
 		assertThat(dao.getCount(), is(0));
-		User user = new User();
-		user.setId("124f");
-		user.setName("asdsad");
-		user.setPassword("married");
-		dao.add(user);
-		User user2 = dao.get(user.getId());
 		
-		assertThat(user2.getName(), is(user.getName()));
+		User user1 = new User("123", "Tom", "spring1");
+		User user2 = new User("1234", "Tyler", "spring2");
+		
+		dao.add(user1);
+		dao.add(user2);
+		User user3 = dao.get(user1.getId());
+		User user4 = dao.get(user2.getId());
+		
+		assertThat(user1.getName(), is(user3.getName()));
 //		assertThat(user2.getName(), is("test"));//에러 검증 java.lang.Asserterror 
-		assertThat(user2.getPassword(), is(user.getPassword()));
+		assertThat(user1.getPassword(), is(user3.getPassword()));
+		assertThat(user2.getName(), is(user4.getName()));
+//		assertThat(user2.getName(), is("test"));//에러 검증 java.lang.Asserterror 
+		assertThat(user2.getPassword(), is(user4.getPassword()));
 	}
 	
 	@Test
@@ -64,6 +69,14 @@ public class UserDaoTest {
 		
 		dao.add(user3);
 		assertThat(dao.getCount(), is(3));
+	}
+	@Test(expected=EmptyResultDataAccessException.class)
+	public void getUserFailure() throws SQLException, ClassNotFoundException{
+		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
+		UserDao dao = context.getBean("userDao", UserDao.class);
 		
+		dao.deleteAll();
+		assertThat(dao.getCount(), is(0));
+		dao.get("unknown_id");
 	}
 }
