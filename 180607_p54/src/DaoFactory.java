@@ -11,10 +11,10 @@ public class DaoFactory {
 		userDao.setDataSource(dataSource());
 		return userDao;
 	}
-//	@Bean
-//	public ConnectionMaker connectionMaker() {
-//		return new AConnectionMaker();
-//	}
+	@Bean
+	public ConnectionMaker connectionMaker() {
+		return new AConnectionMaker();
+	}
 	@Bean
 	public DataSource dataSource() {
 		SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
