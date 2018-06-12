@@ -7,11 +7,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.test.context.*;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations="/applicationContext.xml")
@@ -20,17 +18,18 @@ public class JunitTest {
 		// TODO Auto-generated method stub
 		
 	}
-	@Autowired
-	private ApplicationContext context;
+	@Autowired // bean 을 di 할때 어노테이션 명시로 자동화해줘서 가능 했던 것, 나아가서 applicationcontext 같은bean 의존성 을 전달하거나 주입하는 객체 또한 자신을 bean으로 등록하기 떄문에 같은 방식으로 호출 가능 
 	private UserDao dao;
+	
 	private User user1;
 	private User user2;
 	private User user3;
 	
 	@Before
 	public void setUp() {
-		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
-		dao = context.getBean("userDao", UserDao.class);
+		System.out.println(this);
+//		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
+//		dao = context.getBean("userDao", UserDao.class);
 		this.user1 = new User("123", "Tom", "spring1" );
 		this.user2 = new User("1234", "Tyler", "spring2");
 		this.user3 = new User("1235", "Seth", "spring3");
@@ -71,3 +70,6 @@ public class JunitTest {
 		dao.get("unknown_id");
 	}
 }
+
+
+//@DirtiesContext 메서드에도 적용가능, application context를 그 클래스에 한정해서 바꾸고 사용할 때 사용
