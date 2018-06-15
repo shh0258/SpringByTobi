@@ -20,15 +20,20 @@ public class UserDao {
 	}
 	
 	public void add(User user) throws ClassNotFoundException, SQLException {
-		Connection c = dataSource.getConnection();
-		PreparedStatement ps = c.prepareStatement("insert into User(id, name, password) values(?,?,?)");
-		ps.setString(1, user.getId());
-		ps.setString(2,  user.getName());
-		ps.setString(3, user.getPassword());
-		ps.executeUpdate();
-		
-		ps.close();
-		c.close();
+		jdbcContextWithStatementStrategy(
+				new StatementStrategy() {
+					@Override
+					public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
+						// TODO Auto-generated method stub
+						PreparedStatement ps = c.prepareStatement("insert into user(id, name, password) values(?,?,?)");
+						ps.setString(1, user.getId());
+						ps.setString(2, user.getName());
+						ps.setString(3, user.getPassword());
+						
+						return ps;
+				}
+			}
+		);
 	}
 	
 	public User get(String id) throws ClassNotFoundException, SQLException {
@@ -51,42 +56,17 @@ public class UserDao {
 		return user;
 	}
 	
-	public void deleteAll() throws SQLException {
-//		Connection c = null;
-//		PreparedStatement ps = null;
-//		try {
-//			c = dataSource.getConnection();
-//			StatementStrategy strategy = new DeleteAllStatement();
-//			ps = strategy.makePreparedStatement(c);
-////			ps = makeStatement(c);
-//			ps.executeUpdate();
-//		} catch (SQLException e) {
-//			throw e;
-//		} finally {
-//			if(ps != null) {
-//				try {
-//					ps.close();// close는 만들어진 순서의 반대로 하는 것이 원칙임
-//				} catch (SQLException e) {
-//					
-//				}
-//			}
-//			if(c != null) {
-//				try {
-//					c.close();
-//				} catch (SQLException e) {
-//					
-//				}
-//			}
-//		}
-		StatementStrategy st = new DeleteAllStatement();
-		jdbcContextWithStatementStrategy(st);
+	public void deleteAll() throws SQLException { 
+		jdbcContextWithStatementStrategy(
+				new StatementStrategy() {// 익명 내부 클래스로, 인터페이스 형을 생성하고, 여기에 내부 클래스로 직접 재정의해서, 메서드 내부에서 실행시킬수 있게 
+					@Override
+					public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
+						// TODO Auto-generated method stub
+						return c.prepareStatement("delete from user");
+					}
+				}
+			);
 	}
-	
-//	private PreparedStatement makeStatement(Connection c) throws SQLException {
-//		PreparedStatement ps;
-//		ps = c.prepareStatement("delete from user");
-//		return ps;
-//	}
 	
 	public int getCount() throws SQLException {
 		Connection c = null;
@@ -132,7 +112,7 @@ public class UserDao {
 		try {
 			c = dataSource.getConnection();
 			ps = stmt.makePreparedStatement(c);
-			ps.executeUpdate();// excuteQuery 대신 이 메서드를 써야함
+			ps.executeUpdate();// excuteQuery 대신 이 메서드를 써야함,  리턴값이 없는 경우에는 이것, 아니라면 excutequery
 		} catch (SQLException e) {
 			throw e;
 		} finally {
