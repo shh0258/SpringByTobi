@@ -52,37 +52,41 @@ public class UserDao {
 	}
 	
 	public void deleteAll() throws SQLException {
-		Connection c = null;
-		PreparedStatement ps = null;
-		try {
-			c = dataSource.getConnection();
-			ps = makeStatement(c);
-			ps.executeUpdate();
-		} catch (SQLException e) {
-			throw e;
-		} finally {
-			if(ps != null) {
-				try {
-					ps.close();// close는 만들어진 순서의 반대로 하는 것이 원칙임
-				} catch (SQLException e) {
-					
-				}
-			}
-			if(c != null) {
-				try {
-					c.close();
-				} catch (SQLException e) {
-					
-				}
-			}
-		}
+//		Connection c = null;
+//		PreparedStatement ps = null;
+//		try {
+//			c = dataSource.getConnection();
+//			StatementStrategy strategy = new DeleteAllStatement();
+//			ps = strategy.makePreparedStatement(c);
+////			ps = makeStatement(c);
+//			ps.executeUpdate();
+//		} catch (SQLException e) {
+//			throw e;
+//		} finally {
+//			if(ps != null) {
+//				try {
+//					ps.close();// close는 만들어진 순서의 반대로 하는 것이 원칙임
+//				} catch (SQLException e) {
+//					
+//				}
+//			}
+//			if(c != null) {
+//				try {
+//					c.close();
+//				} catch (SQLException e) {
+//					
+//				}
+//			}
+//		}
+		StatementStrategy st = new DeleteAllStatement();
+		jdbcContextWithStatementStrategy(st);
 	}
 	
-	private PreparedStatement makeStatement(Connection c) throws SQLException {
-		PreparedStatement ps;
-		ps = c.prepareStatement("delete from user");
-		return ps;
-	}
+//	private PreparedStatement makeStatement(Connection c) throws SQLException {
+//		PreparedStatement ps;
+//		ps = c.prepareStatement("delete from user");
+//		return ps;
+//	}
 	
 	public int getCount() throws SQLException {
 		Connection c = null;
@@ -120,4 +124,27 @@ public class UserDao {
 			}
 		}
 	}
+	
+	public void jdbcContextWithStatementStrategy(StatementStrategy stmt) throws SQLException {
+		Connection c = null;
+		PreparedStatement ps = null;
+		
+		try {
+			c = dataSource.getConnection();
+			ps = stmt.makePreparedStatement(c);
+			ps.executeUpdate();// excuteQuery 대신 이 메서드를 써야함
+		} catch (SQLException e) {
+			throw e;
+		} finally {
+			if( ps != null) {try { ps.close();} catch (SQLException e) {} }
+			if( c != null) {try { c.close();} catch (SQLException e) {} }
+		}
+	}
+	
+	
 }
+
+
+// 이 상황에서 deleteall 메서드는 일을 수행하는 클라이언트 이고, 때문에 클라이언트는 이전에 daofactory 처럼 실제로
+//일을수행하는 메서드에 의존성을 주입하고실행하는 역활을 담당해야 하는 것이지, 그 자체로서 기능을 제공하지 않게 해야 
+//의존성주입의 측면에서 클래스를 사용할 수 있다. 이 제어의역전을 통해 코드 재사용성을 높이고 인터페이스화 된 contextmethod를 잘 사용할 수 있게 된다.
